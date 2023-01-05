@@ -1,22 +1,23 @@
-name: CI
-on:
-  pull_request:
-  push:
-    branches: [main]
+name: Check & fix styling
+
+on: [push]
 
 jobs:
-  build:
+  php-cs-fixer:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: [7.4, 8.0, 8.2]
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v4
-      with:
-        php-version: ${{ matrix.php }}
-    - name: Install Composer dependencies
-      run: composer install --prefer-dist --no-suggest --no-interaction
-    - name: Run tests
-      run: vendor/bin/phpunit
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run PHP CS Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+          args: --config=.php_cs.dist.php --allow-risky=yes
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fix styling
