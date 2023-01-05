@@ -20,4 +20,4 @@ jobs:
       - name: Install NPM Dependencies
         run: npm install
       - name: ESLINT
-        run: ./node_modules/.bin/eslint resources/js/ Modules/*/Resources/assets/js/ --ext .js,.react
+        run:  ./node_modules/.bin/eslint resources/assets/js/ test/ --ext .js,.vue
