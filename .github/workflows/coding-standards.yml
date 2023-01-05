@@ -19,7 +19,7 @@ jobs:
       - name: Install NPM Dependencies
         run: npm install
       - name: PHP Coding Standards
-        run: php ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php --dry-run --verbose --diff
+        run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src
 
   eslint:
     name: ES Lint
