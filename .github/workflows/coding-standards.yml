@@ -21,4 +21,3 @@ jobs:
         run: npm install
       - name: PHP Coding Standards
         run: php ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php --dry-run --verbose --diff
-
