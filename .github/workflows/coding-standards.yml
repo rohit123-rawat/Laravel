@@ -1,58 +1,34 @@
-name: Coding Standards
+name: 
 on:
   pull_request:
   push:
     branches: [main]
 
 jobs:
-  phpcs:
-    name: PHP CS
+  app-tests:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup PHP v8.1
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1"
-      - name: Install composer dependencies
+      - uses: actions/checkout@v1
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Composer Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Install NPM Dependencies
         run: npm install
-      - name: PHP Coding Standards
-        run: php ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php --dry-run --verbose --diff
-
-  eslint:
-    name: ES Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup PHP v8.1
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1"
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-      - name: Install NPM Dependencies
-        run: npm install
-      - name: ESLINT
-        run: ./node_modules/.bin/eslint resources/js/ Modules/*/Resources/assets/js/ --ext .js,.vue
-
-  larastan:
-    name: Larastan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup PHP v8.1
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1"
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-      - name: Install NPM Dependencies
-        run: npm install
-      - name: Setup env file
-        run: cp .env.example .env
-      - name: Configure application encryption key
+      - name: Generate key
         run: php artisan key:generate
-      - name: Larastan
-        run: ./vendor/bin/phpstan analyse
+      - name: Execute tests (Unit and Feature tests) using PHPUnit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        run: ./vendor/bin/phpunit
+      - name: Execute tests (Unit and Feature tests) using JEST
+        run: node_modules/.bin/jest
