@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Install NPM Dependencies
+        run: npm install
+      - name: Setup env file
+        run: cp .env.example .env
+      - name: Configure application encryption key
+        run: php artisan key:generate
+      - name: Larastan check
+        run: ./vendor/bin/phpstan analyse  
