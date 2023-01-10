@@ -12,13 +12,12 @@ class OpportunityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function index()
     {
         
         return Inertia::render('Opportunity/Index', [
-            // 'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'opportunities' => Opportunity::all(),
         ]);
     }
@@ -26,7 +25,7 @@ class OpportunityController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function create()
     {
@@ -37,7 +36,7 @@ class OpportunityController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreOpportunityRequest  $request
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function store(StoreOpportunityRequest $request)
     {
@@ -48,7 +47,7 @@ class OpportunityController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Opportunity  $opportunity
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function show(Opportunity $opportunity)
     {
@@ -61,7 +60,7 @@ class OpportunityController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Opportunity  $opportunity
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function edit(Opportunity $opportunity)
     {
@@ -73,7 +72,7 @@ class OpportunityController extends Controller
      *
      * @param  \App\Http\Requests\UpdateOpportunityRequest  $request
      * @param  \App\Models\Opportunity  $opportunity
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function update(UpdateOpportunityRequest $request, Opportunity $opportunity)
     {
@@ -84,7 +83,7 @@ class OpportunityController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Opportunity  $opportunity
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function destroy(Opportunity $opportunity)
     {
